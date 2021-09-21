@@ -13,7 +13,6 @@ enum LidarVersion
     A3 = 2
 };
 
-LidarVersion lidar_version = NONE_DETECTED;
 
 bool check_if_lidar_connected_at_baudrate(unsigned int baudrate)
 {
@@ -35,7 +34,7 @@ bool check_if_lidar_connected_at_baudrate(unsigned int baudrate)
     return connected;
 }
 
-void save_lidar_version(std::string path)
+void save_lidar_version(std::string path, LidarVersion lidar_version)
 {
 
     std::ofstream myfile;
@@ -43,21 +42,22 @@ void save_lidar_version(std::string path)
 
     if (lidar_version == A2)
     {
-        myfile << "export RPLIDAR_VERION=A2\n";
+        myfile << "export RPLIDAR_VERSION=A2\n";
     }
     else if (lidar_version == A3)
     {
-        myfile << "export RPLIDAR_VERION=A3\n";
+        myfile << "export RPLIDAR_VERSION=A3\n";
     }
     else
     {
-        myfile << "export RPLIDAR_VERION=NOT_DETECTED\n";
+        myfile << "export RPLIDAR_VERSION=NOT_DETECTED\n";
     }
     myfile.close();
 }
 
 int main(int argc, char* argv[])
 {
+    LidarVersion lidar_version = NONE_DETECTED;
     std::string file_path;
     if (argc != 2)
     {
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
         lidar_version = A3;
     }
 
-    save_lidar_version(file_path);
+    save_lidar_version(file_path, lidar_version);
 
 
     return 0;
