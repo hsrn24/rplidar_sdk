@@ -10,7 +10,8 @@ enum LidarVersion
 {
     NONE_DETECTED = 0,
     A2 = 1,
-    A3 = 2
+    A3 = 2,
+    S2 = 3
 };
 
 
@@ -48,6 +49,10 @@ void save_lidar_version(std::string path, LidarVersion lidar_version)
     {
         myfile << "export RPLIDAR_VERSION=A3\n";
     }
+    else if (lidar_version == S2)
+    {
+        myfile << "export RPLIDAR_VERSION=S2\n";
+    }
     else
     {
         myfile << "export RPLIDAR_VERSION=NOT_DETECTED\n";
@@ -70,21 +75,20 @@ int main(int argc, char* argv[])
     }
     
 
-
-    //A2 lidar
     if (check_if_lidar_connected_at_baudrate(115200))
     {
         lidar_version = A2;
     }
-
-    //A3 lidar 
-    if (check_if_lidar_connected_at_baudrate(256000))
+    else if (check_if_lidar_connected_at_baudrate(256000))
     {
         lidar_version = A3;
     }
+    else if (check_if_lidar_connected_at_baudrate(1000000))
+    {
+        lidar_version = S2;
+    }
 
     save_lidar_version(file_path, lidar_version);
-
 
     return 0;
 }
